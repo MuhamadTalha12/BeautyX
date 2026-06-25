@@ -1,6 +1,13 @@
 import axios from 'axios';
 
 let apiURL = import.meta.env.VITE_API_URL || '/api';
+
+// If it's a domain name without http/https (e.g. "beautyx-production.up.railway.app"), prepend https://
+if (apiURL !== '/api' && !apiURL.startsWith('http://') && !apiURL.startsWith('https://') && !apiURL.startsWith('/')) {
+  apiURL = `https://${apiURL}`;
+}
+
+// Ensure it ends with /api
 if (apiURL !== '/api' && !apiURL.endsWith('/api')) {
   apiURL = `${apiURL.replace(/\/$/, '')}/api`;
 }
