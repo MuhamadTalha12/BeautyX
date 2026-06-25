@@ -22,6 +22,9 @@ connectDB();
 
 const app = express();
 
+// Trust proxy for reverse proxies (Render, Railway, etc.)
+app.set('trust proxy', 1);
+
 // Set security HTTP headers
 app.use(helmet());
 
@@ -49,10 +52,19 @@ const allowedOrigins = [
   process.env.CLIENT_URL
 ].filter(Boolean);
 
+const isVercelSubdomain = (origin) => {
+  try {
+    const url = new URL(origin);
+    return url.hostname.endsWith('.vercel.app');
+  } catch (e) {
+    return false;
+  }
+};
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
+    if (allowedOrigins.indexOf(origin) === -1 && !isVercelSubdomain(origin)) {
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
       return callback(new Error(msg), false);
     }

@@ -20,9 +20,14 @@ export const sendEmail = async ({ to, subject, html }) => {
       subject,
       html
     });
+    if (response.error) {
+      console.error('Resend API returned an error:', response.error);
+      return { success: false, error: response.error };
+    }
     return response;
   } catch (error) {
     console.error('Error sending email via Resend:', error);
-    throw error;
+    // Return gracefully instead of throwing to prevent crashing the caller process (e.g. registration, checkout)
+    return { success: false, error: error.message };
   }
 };

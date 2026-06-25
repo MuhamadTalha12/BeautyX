@@ -18,8 +18,16 @@ const sendRefreshToken = (res, token) => {
   res.cookie('beautyx_refresh', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+};
+
+const clearRefreshTokenCookie = (res) => {
+  res.clearCookie('beautyx_refresh', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
   });
 };
 
@@ -636,20 +644,20 @@ export const refreshSession = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, getRefreshSecret());
     } catch (err) {
-      res.clearCookie('beautyx_refresh');
+      clearRefreshTokenCookie(res);
       res.status(401);
       throw new Error('Invalid or expired refresh token');
     }
 
     const user = await User.findById(decoded.id);
     if (!user) {
-      res.clearCookie('beautyx_refresh');
+      clearRefreshTokenCookie(res);
       res.status(401);
       throw new Error('User not found');
     }
 
     if (user.status === 'suspended') {
-      res.clearCookie('beautyx_refresh');
+      clearRefreshTokenCookie(res);
       res.status(403);
       throw new Error('Your account has been suspended by the administrator.');
     }
@@ -659,7 +667,7 @@ export const refreshSession = async (req, res, next) => {
       // Reuse detected! Revoke all tokens for this user
       user.refreshTokens = [];
       await user.save();
-      res.clearCookie('beautyx_refresh');
+      clearRefreshTokenCookie(res);
       res.status(403);
       throw new Error('Token reuse detected: active sessions revoked');
     }
@@ -710,7 +718,7 @@ export const logoutUser = async (req, res, next) => {
       }
     }
 
-    res.clearCookie('beautyx_refresh');
+    clearRefreshTokenCookie(res);
     res.json({ success: true, message: 'Successfully logged out' });
   } catch (error) {
     next(error);
