@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
 import connectDB from './config/db.js';
@@ -68,6 +70,18 @@ app.use('/api/orders', orderRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'BeautyX API Server is active and healthy.' });
 });
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  
+  app.use(express.static(path.join(__dirname, '../dist')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
+  });
+}
 
 // Global Error Handler
 app.use(errorHandler);
