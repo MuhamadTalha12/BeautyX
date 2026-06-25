@@ -73,6 +73,14 @@ app.use(cors({
   credentials: true
 }));
 
+// Fallback rewrite for missing /api prefix in client requests (handles misconfigured frontend VITE_API_URL settings)
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && (req.url.startsWith('/auth') || req.url.startsWith('/products') || req.url.startsWith('/orders'))) {
+    req.url = `/api${req.url}`;
+  }
+  next();
+});
+
 // Mount routers
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
