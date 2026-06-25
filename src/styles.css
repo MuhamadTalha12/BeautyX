@@ -1,0 +1,109 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-blush: var(--blush);
+  --color-blush-soft: var(--blush-soft);
+  --color-rose: var(--rose);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --radius: 0.25rem;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --background: oklch(0.985 0.005 85); /* Soft Royal Alabaster */
+  --foreground: oklch(0.12 0.015 250); /* Royal Black */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0.015 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0.015 250);
+
+  /* Royal Blue */
+  --primary: oklch(0.35 0.12 250);
+  --primary-foreground: oklch(0.98 0.01 85); /* Royal Ivory */
+
+  /* Soft Royal Gold shade */
+  --secondary: oklch(0.95 0.018 85);
+  --secondary-foreground: oklch(0.35 0.12 250);
+
+  --muted: oklch(0.97 0.01 85);
+  --muted-foreground: oklch(0.5 0.03 250);
+
+  /* Royal Gold */
+  --accent: oklch(0.72 0.11 80);
+  --accent-foreground: oklch(0.12 0.015 250);
+
+  --destructive: oklch(0.32 0.08 15); /* Royal Maroon */
+  --destructive-foreground: oklch(0.98 0.01 85);
+
+  --border: oklch(0.89 0.015 85);
+  --input: oklch(0.89 0.015 85);
+  --ring: oklch(0.35 0.12 250);
+
+  --blush: oklch(0.94 0.022 85);
+  --blush-soft: oklch(0.97 0.012 85);
+  --rose: oklch(0.32 0.08 15); /* Royal Maroon */
+}
+
+.dark {
+  --background: oklch(0.12 0.015 250); /* Royal Black */
+  --foreground: oklch(0.96 0.01 85); /* Royal Ivory */
+  --card: oklch(0.16 0.02 250); /* Deep Royal Blue-Black Card */
+  --card-foreground: oklch(0.96 0.01 85);
+  --popover: oklch(0.16 0.02 250);
+  --popover-foreground: oklch(0.96 0.01 85);
+  --primary: oklch(0.72 0.11 80); /* Royal Gold */
+  --primary-foreground: oklch(0.12 0.015 250); /* Royal Black */
+  --secondary: oklch(0.25 0.06 15); /* Royal Maroon shade */
+  --secondary-foreground: oklch(0.96 0.01 85);
+  --muted: oklch(0.18 0.02 250);
+  --muted-foreground: oklch(0.7 0.02 250);
+  --accent: oklch(0.35 0.12 250); /* Royal Blue Accent */
+  --accent-foreground: oklch(0.96 0.01 85);
+  --destructive: oklch(0.32 0.08 15); /* Royal Maroon */
+  --destructive-foreground: oklch(0.98 0.01 85);
+  --border: oklch(0.22 0.03 250);
+  --input: oklch(0.22 0.03 250);
+  --ring: oklch(0.72 0.11 80);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; }
+}
